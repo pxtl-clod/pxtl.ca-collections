@@ -82,7 +82,7 @@ namespace Pxtl.Collections
 
         public override void Set(IObjectProxy<TRoot> parent, TMember memberValue)
         {
-            IMemberObjectProxy<TRoot, TJoin> firstObjectProxy = new IMemberObjectProxy<TRoot,TJoin>(First, parent);
+            IMemberObjectProxy<TRoot, TJoin> firstObjectProxy = new MemberObjectProxy<TRoot,TJoin>(First, parent);
             Second.Set(firstObjectProxy, memberValue);
         }
 

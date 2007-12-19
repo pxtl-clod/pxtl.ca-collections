@@ -26,6 +26,31 @@ namespace Pxtl.Collections
         }
     }
 
+    public class DelegatingObjectProxy<T> : ObjectProxy<T>
+    {
+        public DelegatingObjectProxy(GetHandler getter, SetHandler setter)
+        {
+            Getter += getter;
+            Setter += setter;
+        }
+        public delegate T GetHandler();
+        public delegate void SetHandler(T value);
+        public GetHandler Getter;
+        public SetHandler Setter;
+
+        public override T Val
+        {
+            get
+            {
+                return Getter();
+            }
+            set
+            {
+                Setter(value);
+            }
+        }
+    }
+
     public interface IMemberObjectProxy<TParent, TMember> : IObjectProxy<TMember>
     {
         IMemberProxy<TParent, TMember> MemberProxy { get;}
@@ -71,14 +96,14 @@ namespace Pxtl.Collections
         }
     }
 
-    public class IndexerProxy<TKey, TValue> : IMemberObjectProxy<IDictionary<TKey, TValue>, TValue>
+    public class IndexerProxy<TKey, TValue> : MemberObjectProxy<IDictionary<TKey, TValue>, TValue>
     {
         public IndexerProxy(IDictionary<TKey, TValue> dict, TKey key)
             : base(new IndexerMemberProxy<TKey, TValue>(key), new RefProxy<IDictionary<TKey, TValue>>(dict)) 
         {}
     }
 
-    public class TreePathProxy<TDict, TKey> : IMemberObjectProxy<TDict, TDict> where TDict : IDictionary<TKey, TDict>
+    public class TreePathProxy<TDict, TKey> : MemberObjectProxy<TDict, TDict> where TDict : IDictionary<TKey, TDict>
     {
         public TreePathProxy(IObjectProxy<TDict> nodeProxy, IList<TKey> keyPath) : base(new TreePathMemberProxy<TDict, TKey>(keyPath), nodeProxy) {}
     }
