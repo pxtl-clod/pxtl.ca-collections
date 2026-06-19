@@ -45,7 +45,7 @@ This document captures the coding style patterns used in this project.
 
     ```csharp
     public int SingleValueProp 
-        => longAndComplicatedExpression;
+    => longAndComplicatedExpression;
     ```
 
 - For records:
@@ -71,11 +71,11 @@ This document captures the coding style patterns used in this project.
 
     ```csharp
     public OneOf<NotFound, BoardIsDone, Result<int>> SelectBoard(int boardCode)
-        => (boardCode <= 0 || boardCode > Boards.Count)
-            ? new NotFound()
-            : GetBoardByCode(boardCode).IsDone
-            ? new BoardIsDone()
-            : new Result<int>(boardCode - 1);
+    => (boardCode <= 0 || boardCode > Boards.Count)
+        ? new NotFound()
+        : GetBoardByCode(boardCode).IsDone
+        ? new BoardIsDone()
+        : new Result<int>(boardCode - 1);
     ```
 
 ## Comments
@@ -161,7 +161,7 @@ This document captures the coding style patterns used in this project.
 
   ```csharp
   public int BoardSize
-      => Boards.Count();
+    => Boards.Count();
 
   public IEnumerable<int> ActiveBoardIndices { get {
       for(int i = 0; i < Boards.Count; i+=1) {
@@ -225,9 +225,6 @@ This document captures the coding style patterns used in this project.
     var boardBuilders = new Model.BoardBuilder[boardsNumber!.Value];
     ```
 
-- Avoid `var` for members and properties where the type is declared at the
-  declaration point.
-
 ## `#region` and `#endregion`
 
 - Use `#region` / `#endregion` to organize code blocks:
@@ -277,7 +274,7 @@ This document captures the coding style patterns used in this project.
 - Place attributes above the declaration.
 - Use `[JsonIgnore]` from Newtonsoft.Json to exclude properties from
   serialization.
-- Use `[Summary]` or similar to mark XML documentation tags.
+- Use `<summary></summary>` or similar to mark XML documentation tags.
 
 ## Miscellaneous Patterns
 

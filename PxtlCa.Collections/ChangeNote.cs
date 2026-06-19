@@ -1,22 +1,16 @@
-namespace PxtlCa.Collections {
-    public struct ChangeNote<V> {
-        public readonly ChangeType Type;
-        public readonly V? Val;
+namespace PxtlCa.Collections;
 
-        public ChangeNote(ChangeType type, V? val)
-            : this(type) {
-            Val = val;
-        }
+public struct ChangeNote<V> {
+    public readonly ChangeNoteType Type;
+    public readonly V? Val;
 
-        public ChangeNote(ChangeType type) {
-            Type = type;
-            Val = default(V);
-        }
+    public ChangeNote(ChangeNoteType type, V? val)
+        : this(type) {
+        Val = val;
     }
 
-    public enum ChangeType {
-        Set = 0,
-        Add, //refers to the dictionary "add" operation, not necessarily a new entry.
-        Remove
-    };
+    public ChangeNote(ChangeNoteType type) {
+        Type = type;
+        Val = default(V);
+    }
 }

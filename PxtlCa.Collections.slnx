@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="PxtlCa.Collections/PxtlCa.Collections.csproj" />
   <Project Path="PxtlCa.Collections.Tests/PxtlCa.Collections.Tests.csproj" />
+  <Project Path="PxtlCa.ObjectProxies/PxtlCa.ObjectProxies.csproj" />
 </Solution>
