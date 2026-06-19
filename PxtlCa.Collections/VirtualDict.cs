@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Text;
 
-namespace Pxtl.Collections
+namespace PxtlCa.Collections
 {
-    public class VirtualDict<K, V> : IDictionary<K, V> 
+    public class VirtualDict<K, V> : IDictionary<K, V>
     {
-        // Underlying dictionary - everything delegates
+        /// <summary>
+        /// Provides the underlying collection for this wrapper.
+        /// </summary>
         // to this.
 
         private IDictionary<K, V> _dict;
