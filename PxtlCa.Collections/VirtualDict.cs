@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Text;
 
-namespace Pxtl.Collections
+namespace PxtlCa.Collections
 {
     public class VirtualDict<K, V> : IDictionary<K, V>
     {

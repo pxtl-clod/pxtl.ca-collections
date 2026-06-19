@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pxtl.Collections
+namespace PxtlCa.Collections
 {
     public static class util
     {

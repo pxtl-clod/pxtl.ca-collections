@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Pxtl.Collections
+namespace PxtlCa.Collections
 {
     /// <summary>
     /// A virtual list that delegates to another IList implementation.

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
-using static Pxtl.Collections.VirtualList<int>;
-
 namespace PxtlCa.Collections.Tests;
 
 public class VirtualDictCollectionTests
@@ -10,7 +5,7 @@ public class VirtualDictCollectionTests
     [Fact]
     public void CreateEmpty_Collection_Count_Is_Zero()
     {
-        using var dict = new Dictionary<K, V>();
+        var dict = new VirtualDict<string, int>();
         
         Assert.Equal(0, dict.Count);
     }
@@ -18,7 +13,7 @@ public class VirtualDictCollectionTests
     [Fact]
     public void AddItems_ContainsKey_Returns_True()
     {
-        using var dict = new Dictionary<string, int>
+        var dict = new VirtualDict<string, int>
         {
             ["key1"] = 5,
         };
@@ -29,7 +24,7 @@ public class VirtualDictCollectionTests
     [Fact]
     public void RemoveItem_ContainsKey_Is_False_After_Remove()
     {
-        using var dict = new Dictionary<string, int> { ["key"] = 1 };
+        var dict = new VirtualDict<string, int> { ["key"] = 1 };
 
         Assert.True(dict.Remove("key"));
         Assert.False(dict.ContainsKey("key"));
@@ -38,7 +33,7 @@ public class VirtualDictCollectionTests
     [Fact]
     public void Count_Single_Key_Equals_One()
     {
-        using var dict = new Dictionary<int, string> { [5] = "five" };
+        var dict = new VirtualDict<int, string> { [5] = "five" };
 
         Assert.Equal(1, dict.Count);
     }

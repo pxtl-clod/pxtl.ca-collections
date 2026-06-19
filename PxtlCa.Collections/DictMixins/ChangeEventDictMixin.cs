@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pxtl.Collections.DictMixins
+namespace PxtlCa.Collections.DictMixins
 {
     public class ChangeEventDictMixin<K, V> : DictMixin<K, V>
     {
