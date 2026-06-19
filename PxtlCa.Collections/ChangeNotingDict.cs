@@ -15,13 +15,13 @@ where V: ICloneable {
     }
 
     public delegate void ChangeHandler(K key, ChangeNote<V> change);
-    public ChangeHandler Changed;
+    public ChangeHandler? Changed;
 
     #region New Methods and Members
 
     public bool NoteChanges = false;
 
-    protected void NoteChange(K key, ChangeType type, V val)
+    protected void NoteChange(K key, ChangeType type, V? val)
     {
         if (NoteChanges)
         {

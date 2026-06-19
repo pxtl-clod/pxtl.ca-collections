@@ -1,3 +1,5 @@
+using PxtLCa.Collections.Polyfills;
+
 namespace PxtlCa.Collections
 {
     public interface IObjectProxy<T>
@@ -5,20 +7,24 @@ namespace PxtlCa.Collections
         T Val { get; set;}
     }
 
+    public static class IObjectProxyExtensions {
+        public static void ThrowIfValNull<T>(this IObjectProxy<T>? proxy, string? parameterName = null, string? exceptionMessage = null) {
+            ArgumentGuard.ThrowIfNull(proxy, parameterName ?? nameof(proxy));
+            throw new NullProxyValueException(exceptionMessage ?? $"Cannot complete operation. Proxy member '{proxy!.Val}' is null.");
+        }
+    }
+
     public abstract class ObjectProxy<T> : IObjectProxy<T>
     {
-        abstract public T Val { get; set;}
-        public override bool Equals(object obj)
-        {
-            return Val.Equals(obj);
+        abstract public T Val { get; set; }
+        public override bool Equals(object obj) {
+            return Equals(Val, obj);
         }
-        public override int GetHashCode()
-        {
-            return Val.GetHashCode();
+        public override int GetHashCode() {
+            return Val?.GetHashCode() ?? -1;
         }
-        public override string ToString()
-        {
-            return Val.ToString();
+        public override string? ToString() {
+            return Val?.ToString();
         }
     }
 
@@ -47,13 +53,13 @@ namespace PxtlCa.Collections
         }
     }
 
-    public interface IMemberObjectProxy<TParent, TMember> : IObjectProxy<TMember>
+    public interface IObjectMemberProxy<TParent, TMember> : IObjectProxy<TMember>
     {
-        IMemberProxy<TParent, TMember> MemberProxy { get;}
-        IObjectProxy<TParent> Parent { get;}
+        IMemberProxy<TParent, TMember> MemberProxy { get; }
+        IObjectProxy<TParent> Parent { get; }
     }
 
-    public class MemberObjectProxy<TParent, TMember> : IMemberObjectProxy<TParent, TMember>
+    public class ObjectMemberProxy<TParent, TMember> : IObjectMemberProxy<TParent, TMember>
     {
         private IMemberProxy<TParent, TMember> _MemberProxy;
         public IMemberProxy<TParent, TMember> MemberProxy
@@ -73,17 +79,20 @@ namespace PxtlCa.Collections
             }
         }
 
-        public MemberObjectProxy(IMemberProxy<TParent, TMember> memberProxy, IObjectProxy<TParent> parent)
+        public ObjectMemberProxy(IMemberProxy<TParent, TMember> memberProxy, IObjectProxy<TParent> parent)
         {
+            ArgumentGuard.ThrowIfNull(memberProxy, nameof(memberProxy));
+            parent.ThrowIfValNull(nameof(parent));
+
             _MemberProxy = memberProxy;
             _Parent = parent;
         }
 
-        public TMember  Val
+        public TMember Val
         {
 	        get 
 	        { 
-		        return MemberProxy.Get(Parent.Val);
+		        return MemberProxy.Get(Parent!.Val!);
 	        }
 	        set 
 	        { 
@@ -92,14 +101,14 @@ namespace PxtlCa.Collections
         }
     }
 
-    public class IndexerProxy<TKey, TValue> : MemberObjectProxy<IDictionary<TKey, TValue>, TValue>
+    public class IndexerProxy<TKey, TValue> : ObjectMemberProxy<IDictionary<TKey, TValue>, TValue>
     {
         public IndexerProxy(IDictionary<TKey, TValue> dict, TKey key)
             : base(new IndexerMemberProxy<TKey, TValue>(key), new RefProxy<IDictionary<TKey, TValue>>(dict)) 
         {}
     }
 
-    public class TreePathProxy<TDict, TKey> : MemberObjectProxy<TDict, TDict> where TDict : IDictionary<TKey, TDict>
+    public class TreePathProxy<TDict, TKey> : ObjectMemberProxy<TDict, TDict> where TDict : IDictionary<TKey, TDict>
     {
         public TreePathProxy(IObjectProxy<TDict> nodeProxy, IList<TKey> keyPath) : base(new TreePathMemberProxy<TDict, TKey>(keyPath), nodeProxy) {}
     }
@@ -157,8 +166,7 @@ namespace PxtlCa.Collections
             this.SetHandler = setHandler;
         }
 
-        public override T Val
-        {
+        public override T Val {
             get { return GetHandler(); }
             set { SetHandler(value); }
         }
@@ -166,16 +174,16 @@ namespace PxtlCa.Collections
 
     public class RefProxy<T> : ObjectProxy<T>
     {
-    	protected T held = default(T);
-        public RefProxy() { }
-        public RefProxy(T val) { held = val; }
+    	protected T _val;
+        public RefProxy(T val) { _val = val; }
         public override T Val
         {
-            get { return held; }
-            set { held = value; }
+            get { return _val; }
+            set { _val = value!; }
         }
 
         public delegate void UsingDelegate(RefProxy<T> proxy);
+        //TODO: IDisposable object wrapper?
         public static void UsingVal(ref T value, UsingDelegate procedure)
         {
         	RefProxy<T> proxy = new RefProxy<T>(value);

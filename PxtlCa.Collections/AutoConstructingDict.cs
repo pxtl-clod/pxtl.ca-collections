@@ -1,47 +1,43 @@
 namespace PxtlCa.Collections;
+using PxtlCa.Collections.DictMixins;
 
-public class AutoConstructingDict<K, V> : DefaultingDict<K, V> 
+public class AutoConstructingDict<K, V> : MixableDict<K, V> 
 where V : new() {
-    #region Constructors
-    //custom constructor to use a custom valueconstructor
-    public AutoConstructingDict(ValueConstructor con)
-        : base(con)
-    { }
+    public AutoConstructingDict() : base() {
+        Initialize();
+    }
 
-    public AutoConstructingDict(ValueConstructor con, IEqualityComparer<K> comparer)
-        : base(con, comparer)
-    { }
-
-    public AutoConstructingDict() : base()
-    { }
-
-    public AutoConstructingDict(IEqualityComparer<K> comparer)
-        : base(comparer)
-    { }
+    public AutoConstructingDict(IEqualityComparer<K> comparer) 
+    : base(comparer) {
+        Initialize();
+    }
 
     public AutoConstructingDict(int capacity)
-        : base(capacity)
-    { }
+    : base(capacity) {
+        Initialize();
+    }
 
     public AutoConstructingDict(int capacity, IEqualityComparer<K> comparer)
-        : base(capacity, comparer)
-    { }
+    : base(capacity, comparer) {
+        Initialize();
+    }
 
     public AutoConstructingDict(IDictionary<K, V> originalDictionary)
-        : base(originalDictionary)
-    { }
+    : base(originalDictionary) {
+        Initialize();
+    }
 
     protected AutoConstructingDict(IDictionary<K, V> originalDictionary, bool wrap)
-        : base(originalDictionary, wrap)
-    { }
+    : base(originalDictionary, wrap) {
+        Initialize();
+    }
 
     public AutoConstructingDict(IDictionary<K, V> originalDictionary, IEqualityComparer<K> comparer)
-        : base(originalDictionary, comparer)
-    { }
-    #endregion
+    : base(originalDictionary, comparer) {
+        Initialize();
+    }
 
-    protected override V defaultValueConstructorImplementation()
-    {
-        return new V();
+    private void Initialize() {
+        Mixins = new[] { new AutoConstructingDictMixin<K, V>() };
     }
 }

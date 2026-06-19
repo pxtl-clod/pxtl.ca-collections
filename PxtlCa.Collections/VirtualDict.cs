@@ -10,7 +10,7 @@ namespace PxtlCa.Collections
         // to this.
 
         private IDictionary<K, V> _dict;
-        protected virtual internal IDictionary<K, V> _BaseDict
+        protected virtual internal IDictionary<K, V> BaseDict
         {
             get
             {

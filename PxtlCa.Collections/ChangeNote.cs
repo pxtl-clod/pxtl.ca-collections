@@ -3,9 +3,9 @@ namespace PxtlCa.Collections
     public struct ChangeNote<V>
     {
         public readonly ChangeType Type;
-        public readonly V Val;
+        public readonly V? Val;
 
-        public ChangeNote(ChangeType type, V val)
+        public ChangeNote(ChangeType type, V? val)
             : this(type)
         {
             Val = val;
